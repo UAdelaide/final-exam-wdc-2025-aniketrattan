@@ -4,7 +4,7 @@ const path = require('path');
 require('dotenv').config();
 
 const session = require('express-session');
-const dogsApiApp = require('../part1/app');
+//const dogsApiApp = require('../part1/app');
 const app = express();
 app.use(dogsApiApp);
 
@@ -24,10 +24,6 @@ const userRoutes = require('./routes/userRoutes');
 app.use('/api/walks', walkRoutes);
 app.use('/api/users', userRoutes);
 
-if (require.main === module) {
-    const PORT = process.env.PORT || 8080;
-    app.listen(PORT);
-}
 
 // Export the app instead of listening here
 module.exports = app;
