@@ -74,5 +74,25 @@ app.get('/api/walkrequests/open', async (req, res) => {
     }
 });
 
+app.get('/api/walkers/summary', async (req, res) => {
+    try {
+        const [rows] = await db.execute(
+            `SELECT
+         u.username                   AS walker_username,
+         COUNT(wr.rating_id)          AS total_ratings,
+         AVG(wr.rating)               AS average_rating,
+         COUNT(wr.rating_id)          AS completed_walks
+       FROM Users AS u
+       LEFT JOIN WalkRatings AS wr
+         ON u.user_id = wr.walker_id
+       WHERE u.role = 'walker'
+       GROUP BY u.username`
+        );
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT);
