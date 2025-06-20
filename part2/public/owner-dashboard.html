@@ -93,13 +93,6 @@
         const message = ref('');
         const error = ref('');
 
-        // helper to fetch the logged-in user
-     async function getCurrentUser() {
-       const res = await fetch('/api/users/me');
-       if (!res.ok) throw new Error('Not authenticated');
-       return await res.json();           // { user_id, username, role }
-     }
-
         // fetch the logged-in owner’s dogs
         async function loadDogs() {
           const res = await fetch('/api/users/dogs');
