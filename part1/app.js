@@ -40,13 +40,13 @@ let db;
 app.get('/api/dogs', async (req, res) => {
     try {
         const [rows] = await db.execute(
-+            `SELECT
-+         d.dog_id       AS dog_id,
-+         d.name         AS name,
-+         d.size         AS size,
-+         d.owner_id     AS owner_id
-+       FROM Dogs AS d`
-+        );
+            `SELECT
+         d.dog_id       AS dog_id,
+         d.name         AS name,
+         d.size         AS size,
+         d.owner_id     AS owner_id
+       FROM Dogs AS d`
+        );
         res.json(rows);
     } catch (err) {
         res.status(500).json({ error: 'Internal server error' });
