@@ -58,6 +58,7 @@ router.post('/login', async (req, res) => {
 
 // POST /api/users/login
 router.post('/login', async (req, res) => {
+  console.log('🔥  LOGIN BODY:', req.body);
   const { username, password } = req.body;
   try {
     // grab the row
