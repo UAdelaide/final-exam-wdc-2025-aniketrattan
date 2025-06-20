@@ -24,13 +24,14 @@ let db;
         const ddl = fs.readFileSync(path.join(__dirname, 'dogwalks.sql'), 'utf8');
         await setup.query(ddl);
         await setup.end();
+
         db = await mysql.createConnection({
             host: 'localhost',
             user: 'root',
             password: '',
             database: 'DogWalkService'
         });
-    } catch {
+    } catch (err) {
         process.exit(1);
     }
 })();
@@ -38,15 +39,16 @@ let db;
 app.get('/api/dogs', async (req, res) => {
     try {
         const [rows] = await db.execute(
-            `SELECT d.name AS dog_name,
-              d.size AS size,
-              u.username AS owner_username
+            `SELECT
+         d.name         AS dog_name,
+         d.size         AS size,
+         u.username     AS owner_username
        FROM Dogs AS d
        JOIN Users AS u
          ON d.owner_id = u.user_id`
         );
         res.json(rows);
-    } catch {
+    } catch (err) {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
