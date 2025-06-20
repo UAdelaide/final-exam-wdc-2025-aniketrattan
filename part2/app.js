@@ -11,7 +11,7 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'changeme',
+    secret: process.env.SESSION_SECRET || 'alksjdha;sogihnasidvnfasvga',
     resave: false,
     saveUninitialized: false
 }));
