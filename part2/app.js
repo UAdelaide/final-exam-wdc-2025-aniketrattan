@@ -17,7 +17,39 @@ app.use(session({
 }));
 app.use(express.static(path.join(__dirname, '/public')));
 
-app.use(part1App);
+let db;
+async function initDb() {
+  // 1) run your schema file
+  const setup = await mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    multipleStatements: true
+  });
+  const ddl = fs.readFileSync(path.join(__dirname, 'dogwalks.sql'), 'utf8');
+  await setup.query(ddl);
+  await setup.end();
+
+  // 2) connect to DogWalkService
+  db = await mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'DogWalkService'
+  });
+}
+
+// ─── DOGS ENDPOINT ───────────────────────────────────────────────────────────
+// GET /api/dogs → list all dogs
+app.get('/api/dogs', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM Dogs');
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching dogs:', err);
+    res.status(500).json({ error: 'Failed to fetch dogs' });
+  }
+});
 
 // Routes
 const walkRoutes = require('./routes/walkRoutes');
