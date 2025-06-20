@@ -87,11 +87,17 @@
           duration_minutes: '',
           location: ''
         });
-        
-        const dogs  = ref([]);
+
+        const dogs = ref([]);
         const walks = ref([]);
         const message = ref('');
         const error = ref('');
+
+        // fetch the logged-in owner’s dogs
+        async function loadDogs() {
+          const res = await fetch('/api/users/dogs');
+          dogs.value = await res.json();
+        }
 
         async function loadWalks() {
           try {
