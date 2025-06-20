@@ -96,6 +96,9 @@ app.get('/api/walkers/summary', async (req, res) => {
 });
 
 module.exports = app;
+
 if (require.main === module) {
-const PORT = process.env.PORT || 8080;
-app.listen(PORT);
+    const PORT = process.env.PORT || 8080;
+    app.listen(PORT);
+}
+
