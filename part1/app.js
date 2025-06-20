@@ -95,8 +95,5 @@ app.get('/api/walkers/summary', async (req, res) => {
     }
 });
 
-
-
-    const PORT = process.env.PORT || 8080;
-    app.listen(PORT);
-
+const PORT = process.env.PORT || 8080;
+app.listen(PORT);
