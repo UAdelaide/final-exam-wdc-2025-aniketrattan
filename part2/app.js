@@ -1,6 +1,8 @@
 /* eslint-disable linebreak-style */
 const express = require('express');
 const path = require('path');
+const mysql = require('mysql2/promise');
+const fs = require('fs');
 require('dotenv').config();
 
 const session = require('express-session');
