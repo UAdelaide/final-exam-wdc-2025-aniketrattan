@@ -37,61 +37,29 @@ router.get('/me', (req, res) => {
 });
 
 
+
 // POST /api/users/login
 router.post('/login', async (req, res) => {
-  const debug = {};
-
-  // 1) What came in?
-  debug.body = req.body;
-
   const { username, password } = req.body;
+  try {
+    const [rows] = await db.query(
+      `SELECT user_id, username, role, password_hash
+         FROM Users
+        WHERE username = ?`,
+      [username]
+    );
 
-  // 2) Which DB?
-  const [dbInfo] = await db.query(`SELECT DATABASE() AS db`);
-  debug.db = dbInfo[0].db;
+    if (rows.length === 0 || password !== rows[0].password_hash) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
 
-  // 3) What row did MySQL return?
-  const [rows] = await db.query(
-    `SELECT user_id, username, role, password_hash
-       FROM Users
-      WHERE username = ?`,
-    [username]
-  );
-  debug.rows = rows;
-
-  // 4) If no user:
-  if (rows.length === 0) {
-    return res
-      .status(401)
-      .json({ error: 'Invalid credentials', debug });
+    const { user_id, role } = rows[0];
+    req.session.user = { user_id, username, role };
+    return res.json({ message: 'Login successful', user: req.session.user });
+  } catch (err) {
+    return res.status(500).json({ error: 'Login failed' });
   }
-
-  // 5) Compare the two strings
-  const userRow = rows[0];
-  debug.compare = {
-    provided: password,
-    stored: userRow.password_hash
-  };
-
-  if (password !== userRow.password_hash) {
-    return res
-      .status(401)
-      .json({ error: 'Invalid credentials', debug });
-  }
-
-  // 6) Success
-  req.session.user = {
-    user_id: userRow.user_id,
-    username: userRow.username,
-    role: userRow.role
-  };
-  return res.json({
-    message: 'Login successful',
-    user: req.session.user,
-    debug
-  });
 });
-
 
 // GET /api/users/me
 router.get('/me', (req, res) => {
@@ -103,8 +71,7 @@ router.get('/me', (req, res) => {
 
 // POST /api/users/logout
 router.post('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) return res.status(500).json({ error: 'Logout failed' });
+  req.session.destroy(() => {
     res.json({ message: 'Logged out' });
   });
 });
