@@ -65,7 +65,9 @@
                 <div style="position: absolute; top: 20px; left: 20px;">
                     <h2 class="low-contrast">🐶 Dog of the Day</h2>
                     <p v-if="!picUrl">Loading…</p>
-                    <img v-if="picUrl" :src="picUrl" alt="Random dog" />
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" :src="picUrl"
+                        alt="Random dog" />
+
                     <button class="tiny-btn" type="button" @click="showModal = false">Close</button>
                 </div>
             </div>
