@@ -4,6 +4,7 @@ const path = require('path');
 require('dotenv').config();
 
 const session = require('express-session');
+const dogsApiApp = require('../part1/app');
 const app = express();
 
 // Middleware
@@ -21,6 +22,7 @@ const userRoutes = require('./routes/userRoutes');
 
 app.use('/api/walks', walkRoutes);
 app.use('/api/users', userRoutes);
+app.use(dogsApiApp);
 
 // Export the app instead of listening here
 module.exports = app;
