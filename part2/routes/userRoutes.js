@@ -58,57 +58,59 @@ router.post('/login', async (req, res) => {
 
 // POST /api/users/login
 router.post('/login', async (req, res) => {
-  console.log('🔥  LOGIN BODY:', req.body);
+  const debug = {};
+
+  // 1) What came in?
+  debug.body = req.body;
 
   const { username, password } = req.body;
 
-  try {
-    // 1) Check which database we're talking to
-    const [dbInfo] = await db.query(`SELECT DATABASE() AS db`);
-    console.log('🗄️  Connected to database:', dbInfo[0].db);
+  // 2) Which DB?
+  const [dbInfo] = await db.query(`SELECT DATABASE() AS db`);
+  debug.db = dbInfo[0].db;
 
-    // 2) Fetch the user row
-    const [rows] = await db.query(
-      `SELECT user_id, username, role, password_hash
-         FROM Users
-        WHERE username = ?`,
-      [username]
-    );
-    console.log('📋  DB rows:', rows);
+  // 3) What row did MySQL return?
+  const [rows] = await db.query(
+    `SELECT user_id, username, role, password_hash
+       FROM Users
+      WHERE username = ?`,
+    [username]
+  );
+  debug.rows = rows;
 
-    // 3) If no row or password mismatch, fail
-    if (rows.length === 0) {
-      console.log('❌  No user found for', username);
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    const userRow = rows[0];
-    console.log(
-      '🔐  Comparing provided:',
-      JSON.stringify(password),
-      'to stored:',
-      JSON.stringify(userRow.password_hash)
-    );
-
-    if (password !== userRow.password_hash) {
-      console.log('❌  Password mismatch');
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    // 4) Success!
-    req.session.user = {
-      user_id: userRow.user_id,
-      username: userRow.username,
-      role: userRow.role
-    };
-    console.log('✅  Login successful for', req.session.user);
-    res.json({ message: 'Login successful', user: req.session.user });
-
-  } catch (err) {
-    console.error('💥  LOGIN ERROR:', err);
-    res.status(500).json({ error: 'Login failed' });
+  // 4) If no user:
+  if (rows.length === 0) {
+    return res
+      .status(401)
+      .json({ error: 'Invalid credentials', debug });
   }
+
+  // 5) Compare the two strings
+  const userRow = rows[0];
+  debug.compare = {
+    provided: password,
+    stored: userRow.password_hash
+  };
+
+  if (password !== userRow.password_hash) {
+    return res
+      .status(401)
+      .json({ error: 'Invalid credentials', debug });
+  }
+
+  // 6) Success
+  req.session.user = {
+    user_id: userRow.user_id,
+    username: userRow.username,
+    role: userRow.role
+  };
+  return res.json({
+    message: 'Login successful',
+    user: req.session.user,
+    debug
+  });
 });
+
 
 // GET /api/users/me
 router.get('/me', (req, res) => {
