@@ -24,6 +24,10 @@ const userRoutes = require('./routes/userRoutes');
 app.use('/api/walks', walkRoutes);
 app.use('/api/users', userRoutes);
 
+if (require.main === module) {
+    const PORT = process.env.PORT || 8080;
+    app.listen(PORT);
+}
 
 // Export the app instead of listening here
 module.exports = app;
