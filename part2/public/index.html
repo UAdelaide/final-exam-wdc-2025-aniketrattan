@@ -54,15 +54,15 @@
       });
 
       // ─── load all dogs & fetch a random photo for each ──────────────
-+    async function loadDogs() {
-+      const tbody = document.getElementById('dogsTableBody');
-+      try {
-+        const dogs = await fetch('/api/dogs').then(r => r.json());
-+        for (let dog of dogs) {
-+          const { message: picUrl } = await fetch('https://dog.ceo/api/breeds/image/random')
-+                                            .then(r => r.json());
-+          const row = document.createElement('tr');
-          row.innerHTML = `
+      async function loadDogs() {
+        const tbody = document.getElementById('dogsTableBody');
+        try {
+          const dogs = await fetch('/api/dogs').then(r => r.json());
+          for (let dog of dogs) {
+            const { message: picUrl } = await fetch('https://dog.ceo/api/breeds/image/random')
+              .then(r => r.json());
+            const row = document.createElement('tr');
+            row.innerHTML = `
            <td>${dog.dog_id}</td>
            <td>${dog.name}</td>
            <td>${dog.size}</td>
@@ -73,13 +73,13 @@
                    class="img-fluid rounded"
                    style="max-width:100px;" />
             </td>`;
-          tbody.appendChild(row);
+            tbody.appendChild(row);
+          }
+        } catch (err) {
+          console.error('Error loading dogs:', err);
         }
-      } catch (err) {
-        console.error('Error loading dogs:', err);
       }
-    }
-    document.addEventListener('DOMContentLoaded', loadDogs);
+      document.addEventListener('DOMContentLoaded', loadDogs);
 
       if (!res.ok) {
         const body = await res.json();
