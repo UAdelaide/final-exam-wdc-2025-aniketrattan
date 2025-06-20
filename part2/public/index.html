@@ -40,7 +40,7 @@
   </div>
 
   <script>
-    // 1) Define loadDogs globally
+    // Define loadDogs globally
     async function loadDogs() {
       const tbody = document.getElementById('dogsTableBody');
       tbody.innerHTML = '';                    // clear any old rows
@@ -72,10 +72,10 @@
       }
     }
 
-    // 2) Invoke on page load
+    // Invoke on page load
     document.addEventListener('DOMContentLoaded', loadDogs);
 
-    // 3) Keep your login handler separate
+    // Keep your login handler separate
     document.getElementById('loginForm').addEventListener('submit', async e => {
       e.preventDefault();
       const form = e.target;
