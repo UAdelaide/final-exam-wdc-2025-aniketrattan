@@ -4,9 +4,7 @@ const path = require('path');
 require('dotenv').config();
 
 const session = require('express-session');
-//const dogsApiApp = require('../part1/app');
 const app = express();
-//app.use(dogsApiApp);
 
 // Middleware
 app.use(express.json());
