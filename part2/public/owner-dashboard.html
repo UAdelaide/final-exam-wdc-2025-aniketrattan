@@ -12,8 +12,8 @@
 <body class="bg-light">
   <div id="app" class="container py-4">
 
-    <!-- LOG OUT BUTTON (new) -->
-    <button @click="logout" class="btn btn-outline-secondary mb-3">
+    <!-- LOG OUT BUTTON -->
+    <button type="button" @click="logout" class="btn btn-outline-secondary mb-3">
       Log Out
     </button>
 
@@ -102,7 +102,7 @@
           walks.value = await res.json();
         }
 
-        // LOGOUT method (new)
+        // LOGOUT method
         async function logout() {
           await fetch('/api/users/logout', { method: 'POST' });
           window.location.href = 'index.html';
