@@ -40,6 +40,42 @@
   </div>
 
   <script>
+    // 1) Define loadDogs globally
+    async function loadDogs() {
+      const tbody = document.getElementById('dogsTableBody');
+      tbody.innerHTML = '';                    // clear any old rows
+      try {
+        // fetch all dogs
+        const dogs = await fetch('/api/dogs').then(r => r.json());
+
+        // build rows in parallel
+        await Promise.all(dogs.map(async dog => {
+          const { message: picUrl } = await fetch('https://dog.ceo/api/breeds/image/random')
+            .then(r => r.json());
+          const row = document.createElement('tr');
+          row.innerHTML = `
+          <td>${dog.dog_id}</td>
+          <td>${dog.name}</td>
+          <td>${dog.size}</td>
+          <td>${dog.owner_id}</td>
+          <td>
+            <img src="${picUrl}"
+                 alt="Photo of ${dog.name}"
+                 class="img-fluid rounded"
+                 style="max-width:100px;" />
+          </td>
+        `;
+          tbody.appendChild(row);
+        }));
+      } catch (err) {
+        console.error('Error loading dogs:', err);
+      }
+    }
+
+    // 2) Invoke on page load
+    document.addEventListener('DOMContentLoaded', loadDogs);
+
+    // 3) Keep your login handler separate
     document.getElementById('loginForm').addEventListener('submit', async e => {
       e.preventDefault();
       const form = e.target;
@@ -47,47 +83,18 @@
         username: form.username.value,
         password: form.password.value
       };
+
       const res = await fetch('/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(creds)
       });
-
-      // ─── load all dogs & fetch a random photo for each ──────────────
-      async function loadDogs() {
-        const tbody = document.getElementById('dogsTableBody');
-        try {
-          const dogs = await fetch('/api/dogs').then(r => r.json());
-          for (let dog of dogs) {
-            const { message: picUrl } = await fetch('https://dog.ceo/api/breeds/image/random')
-              .then(r => r.json());
-            const row = document.createElement('tr');
-            row.innerHTML = `
-           <td>${dog.dog_id}</td>
-           <td>${dog.name}</td>
-           <td>${dog.size}</td>
-            <td>${dog.owner_id}</td>
-            <td>
-              <img src="${picUrl}"
-                   alt="Dog photo"
-                   class="img-fluid rounded"
-                   style="max-width:100px;" />
-            </td>`;
-            tbody.appendChild(row);
-          }
-        } catch (err) {
-          console.error('Error loading dogs:', err);
-        }
-      }
-      document.addEventListener('DOMContentLoaded', loadDogs);
-
       if (!res.ok) {
-        const body = await res.json();
-        document.getElementById('error').textContent = body.error || 'Login failed';
-        return;
+        const { error } = await res.json();
+        return document.getElementById('error').textContent = error || 'Login failed';
       }
+
       const { user } = await res.json();
-      // redirect based on role
       if (user.role === 'owner') {
         window.location.href = 'owner-dashboard.html';
       } else {
