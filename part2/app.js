@@ -10,7 +10,7 @@ const app = express();
 
 let db;
 
-; (async () => {
+(async () => {
     try {
         // 1a) run your schema file (only if you still need to auto-create/tidy your DB)
         const setup = await mysql.createConnection({
