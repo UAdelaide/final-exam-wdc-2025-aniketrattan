@@ -8,6 +8,11 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(session({                                       // ← NEW
+    secret: process.env.SESSION_SECRET || 'changeme',
+    resave: false,
+    saveUninitialized: false
+}));
 app.use(express.static(path.join(__dirname, '/public')));
 
 // Routes
