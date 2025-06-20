@@ -52,6 +52,9 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(creds)
       });
+
+
+      
       if (!res.ok) {
         const body = await res.json();
         document.getElementById('error').textContent = body.error || 'Login failed';
