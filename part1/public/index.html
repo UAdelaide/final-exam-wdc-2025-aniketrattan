@@ -13,10 +13,6 @@
             padding: 0;
         }
 
-        .hidden {
-            display: none;
-        }
-
         .tiny-btn {
             font-size: 8px;
             padding: 2px 4px;
@@ -64,25 +60,18 @@
         <p v-if="step3" class="low-contrast">Almost there… now show dog!</p>
 
         <div v-if="step3">
-            <button class="tiny-btn" type="button" @click="showModal = true">
-                Open Final Modal
-            </button>
-
+            <button class="tiny-btn" type="button" @click="showModal = true">Open Final Modal</button>
             <div v-if="showModal" role="dialog" aria-modal="true">
-                <div style="position: absolute; top:20px; left:20px;">
+                <div style="position: absolute; top: 20px; left: 20px;">
                     <h2 class="low-contrast">🐶 Dog of the Day</h2>
-                    <p v-if="!picUrl">Loading…</p>
-                    <img src=" " :src="picUrl" v-if="picUrl" alt="Dog of the day" />
+                    <img src="" :src="picUrl" alt/>
                     <p>Name: <strong>{{ dogName }}</strong></p>
                     <p>Breed: {{ breed }}</p>
                     <p>Age: {{ age }}</p>
-                    <button class="tiny-btn" type="button" @click="showModal = false">
-                        Close
-                    </button>
+                    <button class="tiny-btn" type="button" @click="showModal = false">Close</button>
                 </div>
             </div>
         </div>
-
     </div>
 
     <script>
@@ -99,13 +88,18 @@
                     age: '3 years'
                 };
             },
+            methods: {
+                openModal() {
+                    this.showModal = true;
+                    this.picUrl = '';
+                    fetch('https://dog.ceo/api/breeds/image/random')
+                        .then(r => r.json())
+                        .then(d => { this.picUrl = d.message; });
+                }
+            },
             watch: {
                 showModal(val) {
-                    if (val) {
-                        fetch('https://dog.ceo/api/breeds/image/random')
-                            .then(r => r.json())
-                            .then(d => { this.picUrl = d.message; });
-                    }
+                    if (val) this.openModal();
                 }
             }
         }).mount('#app');
