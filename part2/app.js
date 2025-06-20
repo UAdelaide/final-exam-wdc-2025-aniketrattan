@@ -4,7 +4,7 @@ const path = require('path');
 require('dotenv').config();
 
 const part1App = require('../part1/app');
-
+const mysql = require('mysql2/promise');
 const session = require('express-session');
 const app = express();
 
