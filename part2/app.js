@@ -4,7 +4,6 @@ const path = require('path');
 require('dotenv').config();
 
 const part1App = require('../part1/app');
-const mysql = require('mysql2/promise');
 const session = require('express-session');
 const app = express();
 
@@ -17,39 +16,7 @@ app.use(session({
 }));
 app.use(express.static(path.join(__dirname, '/public')));
 
-let db;
-async function initDb() {
-  // 1) run your schema file
-  const setup = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    multipleStatements: true
-  });
-  const ddl = fs.readFileSync(path.join(__dirname, 'dogwalks.sql'), 'utf8');
-  await setup.query(ddl);
-  await setup.end();
-
-  // 2) connect to DogWalkService
-  db = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'DogWalkService'
-  });
-}
-
-// ─── DOGS ENDPOINT ───────────────────────────────────────────────────────────
-// GET /api/dogs → list all dogs
-app.get('/api/dogs', async (req, res) => {
-  try {
-    const [rows] = await db.query('SELECT * FROM Dogs');
-    res.json(rows);
-  } catch (err) {
-
-    res.status(500).json({ error: 'Failed to fetch dogs' });
-  }
-});
+app.use(part1App);
 
 // Routes
 const walkRoutes = require('./routes/walkRoutes');
