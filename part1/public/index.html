@@ -65,7 +65,7 @@
 
         <div v-if="step3" style="position: relative;">
             <button class="tiny-btn" type="button" @click="showModal = true">Open Final Modal</button>
-            <div v-if="showModal" role="dialog" aria-modal="true" class="hidden">
+            <div v-if="showModal" role="dialog" aria-modal="true">
                 <div style="position: absolute; top: 20px; left: 20px;">
                     <h2 class="low-contrast">🐶 Dog of the Day</h2>
                     <img src=" " :src="picUrl" alt="Dog of the day" />
