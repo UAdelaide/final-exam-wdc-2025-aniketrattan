@@ -10,7 +10,7 @@ const app = express();
 
 let db;
 
-(async () => {
+; (async () => {
     try {
         // 1a) run your schema file (only if you still need to auto-create/tidy your DB)
         const setup = await mysql.createConnection({
@@ -31,6 +31,7 @@ let db;
             database: 'DogWalkService'
         });
     } catch (err) {
+        console.error('DB init failed', err);
         process.exit(1);
     }
 })();
@@ -50,24 +51,6 @@ const userRoutes = require('./routes/userRoutes');
 
 app.use('/api/walks', walkRoutes);
 app.use('/api/users', userRoutes);
-
-app.get('/api/dogs', async (req, res) => {
-    try {
-        const [rows] = await db.execute(
-            `SELECT
-         d.dog_id    AS dog_id,
-         d.name      AS name,
-         d.size      AS size,
-         d.owner_id  AS owner_id
-       FROM Dogs AS d`
-        );
-        res.json(rows);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
 
 // Export the app instead of listening here
 module.exports = app;
