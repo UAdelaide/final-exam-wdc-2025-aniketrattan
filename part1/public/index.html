@@ -5,10 +5,24 @@
   <title>Dog of the Day</title>
   <script src="https://unpkg.com/vue@3"></script>
   <style>
-    body { background: linear-gradient(45deg, #fffcf2, #ffe8d6); font-family: sans-serif; margin: 0; padding: 0; }
-    .tiny-btn { font-size: 8px; padding: 2px 4px; margin: 50px; }
-    .low-contrast { color: #aaa; background-color: #eee; }
-    .shake { animation: shake 0.1s infinite; }
+    body {
+      background: linear-gradient(45deg, #fffcf2, #ffe8d6);
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .tiny-btn {
+      font-size: 8px;
+      padding: 2px 4px;
+      margin: 50px;
+    }
+    .low-contrast {
+      color: #aaa;
+      background-color: #eee;
+    }
+    .shake {
+      animation: shake 0.1s infinite;
+    }
     @keyframes shake {
       0%   { transform: translateX(0); }
       25%  { transform: translateX(-2px); }
@@ -34,10 +48,7 @@
         <div style="position: absolute; top: 20px; left: 20px;">
           <h2 class="low-contrast">🐶 Dog of the Day</h2>
           <p v-if="!picUrl">Loading…</p>
-          <img v-if="picUrl" :src="picUrl" alt="Dog of the Day" />
-          <p>Name: <strong>{{ dogName }}</strong></p>
-          <p>Breed: {{ breed }}</p>
-          <p>Age: {{ age }}</p>
+          <img v-if="picUrl" :src="picUrl" alt="Random dog" />
           <button class="tiny-btn" type="button" @click="showModal = false">Close</button>
         </div>
       </div>
@@ -52,10 +63,7 @@
           step2: false,
           step3: false,
           showModal: false,
-          picUrl: '',
-          dogName: 'Montgomery',
-          breed: 'Mystery Mutt',
-          age: '3 years'
+          picUrl: ''
         };
       },
       methods: {
