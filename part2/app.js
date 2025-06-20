@@ -3,6 +3,8 @@ const express = require('express');
 const path = require('path');
 require('dotenv').config();
 
+const part1App = require('../part1/app');
+
 const session = require('express-session');
 const app = express();
 
@@ -14,6 +16,8 @@ app.use(session({
     saveUninitialized: false
 }));
 app.use(express.static(path.join(__dirname, '/public')));
+
+app.use(part1App);
 
 // Routes
 const walkRoutes = require('./routes/walkRoutes');
