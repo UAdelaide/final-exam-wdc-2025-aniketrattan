@@ -1,81 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>Dog of the Day</title>
-  <script src="https://unpkg.com/vue@3"></script>
-  <style>
-    body {
-      background: linear-gradient(45deg, #fffcf2, #ffe8d6);
-      font-family: sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    .tiny-btn {
-      font-size: 8px;
-      padding: 2px 4px;
-      margin: 50px;
-    }
-    .low-contrast {
-      color: #aaa;
-      background-color: #eee;
-    }
-    .shake {
-      animation: shake 0.1s infinite;
-    }
-    @keyframes shake {
-      0%   { transform: translateX(0); }
-      25%  { transform: translateX(-2px); }
-      75%  { transform: translateX(2px); }
-      100% { transform: translateX(0); }
-    }
-  </style>
-</head>
-<body>
-  <div id="app">
-    <button class="tiny-btn" type="button" @click="step1 = !step1">Toggle Step 1</button>
-    <p v-if="step1" class="low-contrast">Step 1 unlocked—click Step 2</p>
-
-    <button v-if="step1" class="tiny-btn" type="button" @click="step2 = !step2">Toggle Step 2</button>
-    <p v-if="step2" class="low-contrast">Step 2 unlocked—click Step 3</p>
-
-    <button v-if="step2" class="tiny-btn shake" type="button" @click="step3 = !step3">Toggle Step 3</button>
-    <p v-if="step3" class="low-contrast">Almost there… now show dog!</p>
-
-    <div v-if="step3">
-      <button class="tiny-btn" type="button" @click="openModal">Open Final Modal</button>
-      <div v-if="showModal" role="dialog" aria-modal="true">
-        <div style="position: absolute; top: 20px; left: 20px;">
-          <h2 class="low-contrast">🐶 Dog of the Day</h2>
-          <p v-if="!picUrl">Loading…</p>
-          <img v-if="picUrl" :src="picUrl" alt="Random dog" />
-          <button class="tiny-btn" type="button" @click="showModal = false">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    Vue.createApp({
-      data() {
-        return {
-          step1: false,
-          step2: false,
-          step3: false,
-          showModal: false,
-          picUrl: ''
-        };
-      },
-      methods: {
-        openModal() {
-          this.showModal = true;
-          this.picUrl = '';
-          fetch('https://dog.ceo/api/breeds/image/random')
-            .then(r => r.json())
-            .then(d => { this.picUrl = d.message; });
+    <meta charset="UTF-8" />
+    <title>Dog of the Day</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <style>
+        body {
+            background: linear-gradient(45deg, #fffcf2, #ffe8d6);
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
         }
-      }
-    }).mount('#app');
-  </script>
+
+        .tiny-btn {
+            font-size: 8px;
+            padding: 2px 4px;
+            margin: 50px;
+        }
+
+        .low-contrast {
+            color: #aaa;
+            background-color: #eee;
+        }
+
+        .shake {
+            animation: shake 0.1s infinite;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-2px);
+            }
+
+            75% {
+                transform: translateX(2px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <button class="tiny-btn" type="button" @click="step1 = !step1">Toggle Step 1</button>
+        <p v-if="step1" class="low-contrast">Step 1 unlocked—click Step 2</p>
+
+        <button v-if="step1" class="tiny-btn" type="button" @click="step2 = !step2">Toggle Step 2</button>
+        <p v-if="step2" class="low-contrast">Step 2 unlocked—click Step 3</p>
+
+        <button v-if="step2" class="tiny-btn shake" type="button" @click="step3 = !step3">Toggle Step 3</button>
+        <p v-if="step3" class="low-contrast">Almost there… now show dog!</p>
+
+        <div v-if="step3">
+            <button class="tiny-btn" type="button" @click="openModal">Open Final Modal</button>
+            <div v-if="showModal" role="dialog" aria-modal="true">
+                <div style="position: absolute; top: 20px; left: 20px;">
+                    <h2 class="low-contrast">🐶 Dog of the Day</h2>
+                    <p v-if="!picUrl">Loading…</p>
+                    <img v-if="picUrl" :src="picUrl" alt="Random dog" />
+                    <button class="tiny-btn" type="button" @click="showModal = false">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    step1: false,
+                    step2: false,
+                    step3: false,
+                    showModal: false,
+                    picUrl: ''
+                };
+            },
+            methods: {
+                openModal() {
+                    this.showModal = true;
+                    this.picUrl = '';
+                    fetch('https://dog.ceo/api/breeds/image/random')
+                        .then(r => r.json())
+                        .then(d => { this.picUrl = d.message; });
+                }
+            }
+        }).mount('#app');
+    </script>
 </body>
+
 </html>
