@@ -14,6 +14,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+app.use(part1App);
 app.use(express.static(path.join(__dirname, '/public')));
 
 // Routes
