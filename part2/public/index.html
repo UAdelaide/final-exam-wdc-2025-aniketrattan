@@ -53,12 +53,12 @@
           const { message: picUrl } = await fetch('https://dog.ceo/api/breeds/image/random')
             .then(r => r.json());
           const row = document.createElement('tr');
-          const id    = idx + 1;                   // or dog.dog_id if it ever appears
-    const name  = dog.dog_name;              // front-end’s “Name” column
-    const size  = dog.size;                  // unchanged
-    const owner = dog.owner_username;        // front-end’s “Owner ID” column
+          const id = idx + 1;
+          const name = dog.dog_name;
+          const size = dog.size;
+          const owner = dog.owner_username;
 
-    row.innerHTML = `
+          row.innerHTML = `
       <td>${id}</td>
       <td>${name}</td>
       <td>${size}</td>
