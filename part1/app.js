@@ -30,8 +30,6 @@ let db;
         if (rows.length === 0) {
             const ddl = fs.readFileSync(path.join(__dirname, 'dogwalks.sql'), 'utf8');
             await setup.query(ddl);
-        } else {
-            console.log('✅ DogWalkService already exists, skipping DDL');
         }
 
         db = await mysql.createConnection({
