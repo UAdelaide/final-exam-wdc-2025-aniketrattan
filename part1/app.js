@@ -22,9 +22,17 @@ let db;
             password: '',
             multipleStatements: true
         });
-        const ddl = fs.readFileSync(path.join(__dirname, 'dogwalks.sql'), 'utf8');
-        await setup.query(ddl);
-        await setup.end();
+        // check if DogWalkService already exists
+        const [rows] = await setup.query(
+            "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'DogWalkService'"
+        );
+
+        if (rows.length === 0) {
+            const ddl = fs.readFileSync(path.join(__dirname, 'dogwalks.sql'), 'utf8');
+            await setup.query(ddl);
+        } else {
+            console.log('✅ DogWalkService already exists, skipping DDL');
+        }
 
         db = await mysql.createConnection({
             host: 'localhost',
