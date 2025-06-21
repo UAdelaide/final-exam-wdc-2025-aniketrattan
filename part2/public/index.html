@@ -53,18 +53,23 @@
           const { message: picUrl } = await fetch('https://dog.ceo/api/breeds/image/random')
             .then(r => r.json());
           const row = document.createElement('tr');
-          row.innerHTML = `
-          <td>${dog.dog_id}</td>
-          <td>${dog.name}</td>
-          <td>${dog.size}</td>
-          <td>${dog.owner_id}</td>
-          <td>
-            <img src="${picUrl}"
-                 alt="Photo of ${dog.name}"
-                 class="img-fluid rounded"
-                 style="max-width:100px;" />
-          </td>
-        `;
+          const id    = idx + 1;                   // or dog.dog_id if it ever appears
+    const name  = dog.dog_name;              // front-end’s “Name” column
+    const size  = dog.size;                  // unchanged
+    const owner = dog.owner_username;        // front-end’s “Owner ID” column
+
+    row.innerHTML = `
+      <td>${id}</td>
+      <td>${name}</td>
+      <td>${size}</td>
+      <td>${owner}</td>
+      <td>
+        <img src="${picUrl}"
+             alt="Photo of ${name}"
+             class="img-fluid rounded"
+             style="max-width:100px;" />
+      </td>
+    `;
           tbody.appendChild(row);
         }));
       } catch (err) {
