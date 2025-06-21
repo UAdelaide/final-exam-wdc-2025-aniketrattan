@@ -32,9 +32,7 @@ let db;
             password: '',
             database: 'DogWalkService'
         });
-        console.log('✅ DB initialized successfully');
     } catch (err) {
-        console.error('❌ DB setup failed:', err);
         process.exit(1);
     }
 })();
